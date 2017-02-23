@@ -49,11 +49,18 @@ For this step there were chosen 4 source and 4 destination points. Source points
 ![Perspective_transform](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Perspective_transform.png)
 Here is result of applying perspective transform to binary images:
 ![Perspective_transform](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Perspective_transform2.png)
+Lane lines look parallel, so we can identify their curvature.
 Other images can be found in 'output_images' folder (filenames have prefix 'warped').
 'Perspective transform' step is in '1.3. Perspective transform' section of 'Advanced_Lane_Finding_Solution.ipynb'.
 
 ### Detection Lane Lines pixels
+For detecting lane lines after previous step I used 'Peaks in a Histogram' method. Firstly, there were calculated initial points for lane lines by using histogram (since our image has only '0' or '1' values). Secondly, 'sliding windows' were used finding and following lines.
+For drawing found lane lines, I used second order polynomial to fit left and right line pixel (function 'process_image' in '1.4. Lane Lines Detection' section).
+Here are results:
+![Perspective_transform](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Lines_detection.png)
+Other images can be found in 'output_images' folder (filenames have prefix 'prelim_result').
 
+###
 
 
 
