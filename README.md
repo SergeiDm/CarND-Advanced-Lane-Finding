@@ -1,6 +1,6 @@
 # CarND-Advanced-Lane-Finding
 ## Project Description
-The goal of the project is to detect lane lines on a road by processing video. The process of the video includes the following steps:
+The goal of the project is to detect lane lines on a road, their curvature by processing video. The process of the video includes the following steps:
 - Camera Calibration.
 - Distortion Correction.
 - Creating binary images.
@@ -27,21 +27,32 @@ For some calibration images in folder 'camera_calibration', the function 'cv2.fi
 
 ## Pipeline (single images)
 ### Distortion Correction
-Distortion correction of test images was provided by matrix and distortion coefficients calculted in previous step (see '1.1. Distortion Correction' section in 'Advanced_Lane_Finding_Solution.ipynb'):
+Distortion correction of test images was provided by matrix and distortion coefficients calculted in previous step:
 ![Distortion_correction](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Distortion_correction.png)
 If take a look at a car (the closest to the right border of images), we can see the different distances between the car and right border.
 Other undistorted images can be found in 'output_images' folder (filenames have prefix 'undist').
+'Distortion Correction' step is in '1.1. Distortion Correction' section of 'Advanced_Lane_Finding_Solution.ipynb'.
 
 ### Creating binary images
 Processing images we should decide which pixels are part of lane lines. In general lane lines tend to be vertical and have specific colors (yellow and white) which creates a contrast with road surface color. So, for finding lane lines we should reduce irrelevant information in an image by creating binary image. With a knowledge of verticality and colors of lane lines we can apply the following techniques:
 - Color thresholding: I used V channels of YUV and HSV color spaces for thresholding ((0,110) for YUV, (240,255) for HSV). This allowed to clearly identify yellow color in different conditions: shadows, pavement color changes and so on.
 - Gradient thresholding: I applied magnitude of gradients in both the x and y directions (Sobel operators), but there was used decreasing coefficient for y gradient, because of assumption 'lane lines tend to be vertical'.
-Both color and gradient thresholding were combined by 'or' operator (thresholding steps at lines # through # in another_file.py).
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps in '1.2. Binary Image' section in 'Advanced_Lane_Finding_Solution.ipynb'). 
+Both color and gradient thresholding were combined by 'or' operator. 
 Here's an example of this step:
 ![Binary_images](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Binary_images.png)
 Other binary images can be found in 'output_images' folder (filenames have prefix 'binary').
+'Creating binary images' step is in '1.2. Binary Image' section of 'Advanced_Lane_Finding_Solution.ipynb'.
 
+### Perspective transform
+It's complicated to define lane lines curvature with given image perspective, so it reasonable to 'convert' image points to a new perspective so called bird’s-eye view. In this case we will have view lane lines from above.
+For this step there were chosen 4 source and 4 destination points. Source points are angular points of trapezoidal region, covering lane lines (see the left picture below). Destination points were chosen in such a way as to lane lines were parallel (see the left picture below):
+![Perspective_transform](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Perspective_transform.png)
+Here is result of applying perspective transform to binary images:
+![Perspective_transform](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Perspective_transform2.png)
+Other images can be found in 'output_images' folder (filenames have prefix 'warped').
+'Perspective transform' step is in '1.3. Perspective transform' section of 'Advanced_Lane_Finding_Solution.ipynb'.
+
+### Detection Lane Lines pixels
 
 
 
