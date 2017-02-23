@@ -22,15 +22,19 @@ The result of pipeline work on 'project_video.mp4' is https://youtu.be/y2oDu1P6v
 
 ## Camera Calibration
 The images of chessboard (9 x 6 internal corners ) were taken for calibrating camera (see folder 'camera_calibration'). Chessboard image is a high contrast pattern which allows to easily detect internal cornenrs. The main idea consists of matching 3D real world points and its corresponding 2D image points. By using 'cv2.findChessboardCorners' function, internal corners were found and passed to 'cv2.calibrateCamera' function, which calculates the camera matrix and distortion coefficients.
+
 In 'Camera Сalibration' section in 'Advanced_Lane_Finding_Solution.ipynb' script we can see results of defining internal corners. Here is an example:
 ![Camera_calibration](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Camera_calibration.png)
+
 For some calibration images in folder 'camera_calibration', the function 'cv2.findChessboardCorners' didn't find corners, because part of chessboard displayed on these images doesn't include all 9x6 corners which we are looking for.
 
 ## Pipeline (single images)
 ### Distortion Correction
 Distortion correction of test images was provided by matrix and distortion coefficients calculted in previous step:
 ![Distortion_correction](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Distortion_correction.png)
+
 If take a look at a car (the closest to the right border of images), we can see the different distances between the car and right border.
+
 Other undistorted images can be found in 'output_images' folder (filenames have prefix 'undist').
 'Distortion Correction' step is in '1.1. Distortion Correction' section of 'Advanced_Lane_Finding_Solution.ipynb'.
 
@@ -40,26 +44,34 @@ Processing images we should decide which pixels are part of lane lines. In gener
 - Gradient thresholding: I applied magnitude of gradients in both the x and y directions (Sobel operators), but there was used decreasing coefficient for y gradient, because of assumption 'lane lines tend to be vertical'.
 
 Both color and gradient thresholding were combined by 'or' operator. 
+
 Here's an example of this step:
 ![Binary_images](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Binary_images.png)
+
 Other binary images can be found in 'output_images' folder (filenames have prefix 'binary').
 'Creating binary images' step is in '1.2. Binary Image' section of 'Advanced_Lane_Finding_Solution.ipynb'.
 
 ### Perspective transform
 It's complicated to define lane lines curvature with given image perspective, so it reasonable to 'convert' image points to a new perspective so called bird’s-eye view. In this case we will have view lane lines from above.
+
 For this step there were chosen 4 source and 4 destination points. Source points are angular points of trapezoidal region, covering lane lines (see the left picture below). Destination points were chosen in such a way as to lane lines were parallel (see the left picture below):
 ![Perspective_transform](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Perspective_transform.png)
+
 Here is result of applying perspective transform to binary images:
 ![Perspective_transform2](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Perspective_transform2.png)
+
 Lane lines look parallel, so we can identify their curvature.
+
 Other images can be found in 'output_images' folder (filenames have prefix 'warped').
 'Perspective transform' step is in '1.3. Perspective transform' section of 'Advanced_Lane_Finding_Solution.ipynb'.
 
 ### Detection Lane Lines pixels
 For detecting lane lines after previous step I used 'Peaks in a Histogram' method. Firstly, there were calculated initial points for lane lines by using histogram (since our image has only '0' or '1' values). Secondly, 'sliding windows' were used finding and following lines.
 For drawing found lane lines, I used second order polynomial to fit left and right line pixel (function 'process_image' in '1.4. Lane Lines Detection' section, comment '# Fitting a second order polynomial to each').
+
 Here are results:
 ![Lines_detection](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Lines_detection.png)
+
 Other images can be found in 'output_images' folder (filenames have prefix 'prelim_result').
 This step is in '1.4. Lane Lines Detection' section of 'Advanced_Lane_Finding_Solution.ipynb'.
 
@@ -77,7 +89,9 @@ These examples show that lane boundaries were correctly identified.
 ## Pipeline (video)
 Pipeline for video include all steps of processing single image, but there is no need to do blind search lane lines in the next frame of video since we know positions from previous frame, so I modified Lane Lines Detection fucntion (see '2.1. Modifying Lane Lines Detection fucntion' of 'Advanced_Lane_Finding_Solution.ipynb').
 Moreover, I included binary image and bird's-eye view in the video since it helps to understand performance prelimnary steps.
+
 Here's a link to my video result: https://youtu.be/y2oDu1P6vjw. 
+
 For challenge video: https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_challenge_video_1.mp4
 
 ## Discussion
