@@ -11,7 +11,7 @@ The goal of the project is to detect lane lines on a road, their curvature by pr
 
 ## Project files
 The project includes the following folder/files:
-- camera_calibration – the folder with Chess Board images for a camera calibration.
+- camera_calibration – the folder with chessboard images for a camera calibration.
 - test_images - the folder with image examples for testing pipeline.
 - output_images - the folder with results of testing all steps of pipeline.
 - Advanced_Lane_Finding_Solution.ipynb - the script with pipeline.
@@ -38,6 +38,7 @@ Other undistorted images can be found in 'output_images' folder (filenames have 
 Processing images we should decide which pixels are part of lane lines. In general lane lines tend to be vertical and have specific colors (yellow and white) which creates a contrast with road surface color. So, for finding lane lines we should reduce irrelevant information in an image by creating binary image. With a knowledge of verticality and colors of lane lines we can apply the following techniques:
 - Color thresholding: I used V channels of YUV and HSV color spaces for thresholding ((0,110) for YUV, (240,255) for HSV). This allowed to clearly identify yellow color in different conditions: shadows, pavement color changes and so on.
 - Gradient thresholding: I applied magnitude of gradients in both the x and y directions (Sobel operators), but there was used decreasing coefficient for y gradient, because of assumption 'lane lines tend to be vertical'.
+
 Both color and gradient thresholding were combined by 'or' operator. 
 Here's an example of this step:
 ![Binary_images](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Binary_images.png)
@@ -86,6 +87,7 @@ The pipeline which was applied here has the folowing main steps:
 - Perspective transform.
 - Detection Lane Lines pixels.
 Steps 'Creating binary images' and 'Detection Lane Lines pixels' have a lot of hyperparameters (e.g. min, max threshold, color space transformation and so on) and assumptions (we have both right and left lane lines on image, conditions allow us to identify lines). When we tune hyperparameters, we try to fit the pipeline for certain given exmaples. It may lead us to overfitting (in terms of neural network). It means when we meet video for example with a new weather conditions we may not to clearly identify lines.
+
 The cases where the algorithm given here is likely to fail may be the following:
 * sunny wheather conditions,
 * shadows from objects,
@@ -94,6 +96,7 @@ The cases where the algorithm given here is likely to fail may be the following:
 * double lines,
 * elements like barriers with yellow or white coloring,
 * poor images.
+
 In cases listed above, lane lines pixels are complicated to distinguish from surrounding area. So for improving algorithm the following steps seem reasonable:
 * collect cases with different conditions (not only weather conditions, but also shadows, surface color and so on).
 * define a recovery algorithm when we lost lane lines track.
