@@ -7,6 +7,7 @@ The goal of the project is to detect lane lines on a road, their curvature by pr
 - Perspective transform.
 - Detection Lane Lines pixels.
 - Determining the curvature of the lane and vehicle position.
+- Drawing detected lane lines on initial image
 
 ## Project files
 The project includes the following folder/files:
@@ -55,12 +56,19 @@ Other images can be found in 'output_images' folder (filenames have prefix 'warp
 
 ### Detection Lane Lines pixels
 For detecting lane lines after previous step I used 'Peaks in a Histogram' method. Firstly, there were calculated initial points for lane lines by using histogram (since our image has only '0' or '1' values). Secondly, 'sliding windows' were used finding and following lines.
-For drawing found lane lines, I used second order polynomial to fit left and right line pixel (function 'process_image' in '1.4. Lane Lines Detection' section).
+For drawing found lane lines, I used second order polynomial to fit left and right line pixel (function 'process_image' in '1.4. Lane Lines Detection' section, comment '# Fitting a second order polynomial to each').
 Here are results:
 ![Perspective_transform](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Lines_detection.png)
 Other images can be found in 'output_images' folder (filenames have prefix 'prelim_result').
+This step is in '1.4. Lane Lines Detection' section of 'Advanced_Lane_Finding_Solution.ipynb'.
 
-###
+### Determining the curvature of the lane and vehicle position
+I calculated radius of the curvature as average of curvature of the left and right polinomials (function 'process_image' in '1.4. Lane Lines Detection' section, comment '# Calculating the radius of curvature'). The curvature was calculating according to http://www.intmath.com/applications-differentiation/8-radius-curvature.php. But before applying these steps, I converted pixels to meters:
+- 30/720m for y pixel
+- 3.7/700m for x pixel
+For the vehicle position, I found difference between the image center and midpoint of left and right lane lines (function 'process_image' in '1.4. Lane Lines Detection' section, comment '# Calculating the offset of the car on the road').
+
+### Drawing detected lane lines on initial image
 
 
 
