@@ -77,7 +77,8 @@ These examples show that lane boundaries were correctly identified.
 ## Pipeline (video)
 Pipeline for video include all steps of processing single image, but there is no need to do blind search lane lines in the next frame of video since we know positions from previous frame, so I modified Lane Lines Detection fucntion (see '2.1. Modifying Lane Lines Detection fucntion' of 'Advanced_Lane_Finding_Solution.ipynb').
 Moreover, I included binary image and bird's-eye view in the video since it helps to understand performance prelimnary steps.
-Here's a link to my video result: https://youtu.be/y2oDu1P6vjw. For challenge video: https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_challenge_video_1.mp4
+Here's a link to my video result: https://youtu.be/y2oDu1P6vjw. 
+For challenge video: https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_challenge_video_1.mp4
 
 ## Discussion
 The pipeline which was applied here has the folowing main steps:
