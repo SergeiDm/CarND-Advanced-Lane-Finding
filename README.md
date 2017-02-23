@@ -22,3 +22,4 @@ The result of pipeline work on 'project_video.mp4' is https://youtu.be/y2oDu1P6v
 ## Camera Calibration
 The images of chessboard (9 x 6 internal corners ) were taken for calibrating camera (see folder 'camera_calibration'). Chessboard image is a high contrast pattern which allows to easily detect internal cornenrs. The main idea consists of matching 3D real world points and its corresponding 2D image points. By using 'cv2.findChessboardCorners' function, internal corners were found and passed to 'cv2.calibrateCamera' function, which calculates the camera matrix and distortion coefficients.
 In 'Camera Сalibration' section of 'Advanced_Lane_Finding_Solution.ipynb' script we can see results of defining internal corners. Here are an examples:
+! [Calibration 1](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/camera_calibration/calibration1.jpg)
