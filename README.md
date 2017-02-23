@@ -49,7 +49,7 @@ It's complicated to define lane lines curvature with given image perspective, so
 For this step there were chosen 4 source and 4 destination points. Source points are angular points of trapezoidal region, covering lane lines (see the left picture below). Destination points were chosen in such a way as to lane lines were parallel (see the left picture below):
 ![Perspective_transform](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Perspective_transform.png)
 Here is result of applying perspective transform to binary images:
-![Perspective_transform](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Perspective_transform2.png)
+![Perspective_transform2](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Perspective_transform2.png)
 Lane lines look parallel, so we can identify their curvature.
 Other images can be found in 'output_images' folder (filenames have prefix 'warped').
 'Perspective transform' step is in '1.3. Perspective transform' section of 'Advanced_Lane_Finding_Solution.ipynb'.
@@ -58,7 +58,7 @@ Other images can be found in 'output_images' folder (filenames have prefix 'warp
 For detecting lane lines after previous step I used 'Peaks in a Histogram' method. Firstly, there were calculated initial points for lane lines by using histogram (since our image has only '0' or '1' values). Secondly, 'sliding windows' were used finding and following lines.
 For drawing found lane lines, I used second order polynomial to fit left and right line pixel (function 'process_image' in '1.4. Lane Lines Detection' section, comment '# Fitting a second order polynomial to each').
 Here are results:
-![Perspective_transform](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Lines_detection.png)
+![Lines_detection](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Lines_detection.png)
 Other images can be found in 'output_images' folder (filenames have prefix 'prelim_result').
 This step is in '1.4. Lane Lines Detection' section of 'Advanced_Lane_Finding_Solution.ipynb'.
 
@@ -69,12 +69,33 @@ I calculated radius of the curvature as average of curvature of the left and rig
 For the vehicle position, I found difference between the image center and midpoint of left and right lane lines (function 'process_image' in '1.4. Lane Lines Detection' section, comment '# Calculating the offset of the car on the road').
 
 ### Drawing detected lane lines on initial image
+Lane lines were displayed on initial images in '1.4. Lane Lines Detection' section ('# Drawing lane lines on initial image' comment). Here are examples:
+![Lines_detection2](https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_images/Lines_detection2.png)
+These examples show that lane boundaries were correctly identified.
 
+## Pipeline (video)
+Pipeline for video include all steps of processing single image, but there is no need to do blind search lane lines in the next frame of video since we know positions from previous frame, so I modified Lane Lines Detection fucntion (see '2.1. Modifying Lane Lines Detection fucntion' of 'Advanced_Lane_Finding_Solution.ipynb').
+Moreover, I included binary image and bird's-eye view in the video since it helps to understand performance prelimnary steps.
+Here's a link to my video result: https://youtu.be/y2oDu1P6vjw. For challenge video: https://github.com/SergeiDm/CarND-Advanced-Lane-Finding/blob/master/output_challenge_video_1.mp4
 
-
-
-
-
-
-
-
+## Discussion
+The pipeline which was applied here has the folowing main steps:
+- Camera Calibration.
+- Distortion Correction.
+- Creating binary images.
+- Perspective transform.
+- Detection Lane Lines pixels.
+Steps 'Creating binary images' and 'Detection Lane Lines pixels' have a lot of hyperparameters (e.g. min, max threshold, color space transformation and so on) and assumptions (we have both right and left lane lines on image, conditions allow us to identify lines). When we tune hyperparameters, we try to fit the pipeline for certain given exmaples. It may lead us to overfitting (in terms of neural network). It means when we meet video for example with a new weather conditions we may not to clearly identify lines.
+The cases where the algorithm given here is likely to fail may be the following:
+* sunny wheather conditions,
+* shadows from objects,
+* changing road surface color,
+* a car going ahead,
+* double lines,
+* elements like barriers with yellow or white coloring,
+* poor images.
+In cases listed above, lane lines pixels are complicated to distinguish from surrounding area. So for improving algorithm the following steps seem reasonable:
+* collect cases with different conditions (not only weather conditions, but also shadows, surface color and so on).
+* define a recovery algorithm when we lost lane lines track.
+* define some metrics to check that the results are correct and correction plan if they are not.
+* use other criteria for defining a car position.
